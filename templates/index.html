@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Home Page">
+    <title>{% block title %}{{ title }}{% endblock %} - TMI</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="../static/css/layouts/marketing.css">
+    <!--<![endif]-->
+</head>
+<body>
+
+
+<div class="header">
+    <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading" href="">TMI</a>
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item">
+                <input type="text" placeholder="username">
+                <input type="password" placeholder="password">
+                <label for="remember" style="color: white">
+                    <input id="remember" type="checkbox">Remember Me
+                </label>
+
+                <button type="submit" class="pure-button pure-button-primary">Sign In</button>
+            </li>
+            <li class="pure-menu-item"><a href="signup" class="pure-menu-link">Sign Up</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

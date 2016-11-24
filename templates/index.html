@@ -10,28 +10,25 @@
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <!--[if gt IE 8]><!-->
     <link rel="stylesheet" href="../static/css/layouts/marketing.css">
+
     <!--<![endif]-->
 </head>
 <body>
-
-
 <div class="header">
     <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
-        <a class="pure-menu-heading" href="">TMI</a>
+        <a class="pure-menu-heading" href="/">TMI</a>
         <ul class="pure-menu-list">
             <li class="pure-menu-item">
                 <input type="text" placeholder="username">
                 <input type="password" placeholder="password">
-                <label for="remember" style="color: white">
-                    <input id="remember" type="checkbox">Remember Me
-                </label>
-
                 <button type="submit" class="pure-button pure-button-primary">Sign In</button>
             </li>
             <li class="pure-menu-item"><a href="signup" class="pure-menu-link">Sign Up</a></li>
         </ul>
     </div>
 </div>
-
+<div class="content-wrapper">
+    {% block content %}{% endblock %}
+</div>
 </body>
 </html>

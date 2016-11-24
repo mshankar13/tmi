@@ -180,7 +180,7 @@ a.pure-button-primary {
 .content-wrapper {
     /* These styles are required for the "scroll-over" effect */
     position: absolute;
-    top: 87%;
+    top: 12%;
     width: 100%;
     min-height: 12%;
     z-index: 2;
@@ -193,7 +193,7 @@ a.pure-button-primary {
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin: 2em 0 1em;
+    /*margin: 2em 0 1em;*/
 }
 
 /* This is a modifier class used when the content-head is inside a ribbon */

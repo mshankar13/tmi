@@ -1,6 +1,9 @@
 from flask import Flask, url_for, render_template, request
+from flask_sessions import sessions
 from model.SignUpForm import SignUpForm
+from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql:localhost'
 app.secret_key = 'dev-key'
 
 @app.route('/')

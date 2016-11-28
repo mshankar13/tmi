@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <div class="content pure-u-1-3">
+
+        <h2 class="content-head">Sign In</h2>
+        <form class="pure-form pure-form-stacked" method="POST" action="/login">
+            <fieldset>
+                {{ login.hidden_tag() }}
+
+                {{ login.userID.label }}
+                {% if login.userID.errors %}
+                    {% for error in login.userID.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+                {{ login.userID }}
+
+                {{ login.password.label }}
+                {% if login.password.errors %}
+                    {% for error in login.password.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+                {{ login.password }}
+                
+                {{ login.login }}
+            </fieldset>
+        </form>
+    </div>
+{% endblock %}

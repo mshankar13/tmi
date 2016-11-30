@@ -6,10 +6,9 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-    db.init_app()
+    db.init_app(app)
     db.app = app
-    with app.test_request_context():
-        from model import Model
-        db.create_all()
+
+    db.create_all()
 
     return app

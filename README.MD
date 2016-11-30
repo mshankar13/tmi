@@ -2,13 +2,13 @@
 
 ###To Do:
 -   [ ] **~~Everything~~**
--   [ ] **Connect to Database**
+-   [x] **Connect to Database**
 -   **Setup Model Classes:**
     - [ ] User
     - [ ] Groups
     - [ ] Pages
 -   **Add User Sessions:**
-    -   [ ] Log in
+    -   [x] Log in
     -   [ ] Log out
 -   **Create dynamic pages for user interaction:**
     -   [x] Index
@@ -47,6 +47,8 @@
     1.  Open a terminal in the project directory
     2.  Create a virtual environment:
         ```$ virtualenv venv```
+        note: you may need to specify a path to your python3 binary if your default version is 2
+        ``` virtualenv -p /path/to/file venv```
     3.  Activate the virtual environment:
         * On Mac/Linux:
             ```$ source venv/bin/activate```
@@ -57,7 +59,7 @@
                 $ cd ../..
             ```
     4.  Install dependencies:
-        ```$ pip install requirements.txt```
+        ```$ pip install -r requirements.txt```
     5.  Run server:
         ```$ python tmi.py```
           
@@ -70,7 +72,7 @@
     -   Flask: http://flask.pocoo.org/docs/0.11/tutorial/
     -   Flask-Forms: https://flask-wtf.readthedocs.io/en/stable/quickstart.html#creating-forms
     -   SQLAlchemy: http://flask-sqlalchemy.pocoo.org/2.1/
-    -   Excellent Lynda tutorial: https://www.lynda.com/Flask-tutorials/Learning-Flask/521231-2.html
+    -   ~~~Excellent Lynda tutorial: https://www.lynda.com/Flask-tutorials/Learning-Flask/521231-2.html~~~ Outdated
 
 - Front-end:
     -   PureCSS: http://purecss.io/

@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <!--[if gt IE 8]><!-->
     <link rel="stylesheet" href="../static/css/layouts/marketing.css">
-
     <!--<![endif]-->
 </head>
 <body>
@@ -18,11 +17,18 @@
     <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
         <a class="pure-menu-heading" href="/">TMI</a>
         <ul class="pure-menu-list">
-            <li class="pure-menu-item">
-                <input type="text" placeholder="username">
-                <input type="password" placeholder="password">
-                <button type="submit" class="pure-button pure-button-primary">Sign In</button>
-            </li>
+            {% if not current_user.is_authenticated %}
+            <form class="pure-menu-item" method="POST" action="/login">
+                <fieldset>
+                    {{ login.userID }}
+                    {{ login.password }}
+                    {{ login.login }}
+                </fieldset>
+            </form>
+            {% else %}
+                {{ current_user.userID }}
+            {% endif %}
+            
             <li class="pure-menu-item"><a href="signup" class="pure-menu-link">Sign Up</a></li>
         </ul>
     </div>

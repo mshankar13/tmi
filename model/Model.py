@@ -8,7 +8,7 @@ class User(db.Model,UserMixin):
     passwd = db.Column(db.VARCHAR(54))
     lastName = db.Column(db.String(15))
     firstName = db.Column(db.String(15))
-    email = db.Column(db.String(25))
+    email = db.Column(db.VARCHAR(50))
     address = db.Column(db.String(25))
     city = db.Column(db.String(25))
     state = db.Column(db.String(25))

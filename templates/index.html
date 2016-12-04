@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Home Page">
     <title>{% block title %}{{ title }}{% endblock %} - TMI</title>
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/css/pure.css">
+    <link rel="stylesheet" href="../static/css/grids-responsive.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
     <!--[if gt IE 8]><!-->
     <link rel="stylesheet" href="../static/css/layouts/marketing.css">
     <!--<![endif]-->
@@ -19,6 +19,7 @@
         <ul class="pure-menu-list">
             {% if not current_user.is_authenticated %}
             <form class="pure-menu-item" method="POST" action="/login">
+                {{ login.hidden_tag() }}
                 <fieldset>
                     {{ login.userID }}
                     {{ login.password }}
@@ -26,10 +27,22 @@
                 </fieldset>
             </form>
             {% else %}
-                {{ current_user.userID }}
+                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                             <a href="#" class="pure-menu-link">
+                                 {{ current_user.userID }}
+                             </a>
+                    <ul class="pure-menu-children">
+                        <li class="pure-menu-item">
+                            <a href="/logout" class="pure-menu-link">
+                                LogOut
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             {% endif %}
-            
-            <li class="pure-menu-item"><a href="signup" class="pure-menu-link">Sign Up</a></li>
+            {% if not current_user.is_authenticated %}
+                <li class="pure-menu-item"><a href="signup" class="pure-menu-link">Sign Up</a></li>
+            {% endif %}
         </ul>
     </div>
 </div>

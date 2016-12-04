@@ -1,9 +1,6 @@
-DROP SCHEMA IF EXISTS tmi;
-CREATE SCHEMA IF NOT EXISTS tmi;
-USE tmi;
 CREATE TABLE `User` (
     userID CHAR(14),
-    passwd VARCHAR(54),
+    passwd VARCHAR(100),
     lastName VARCHAR(15),
     firstName VARCHAR(15),
     address VARCHAR(50),
@@ -213,7 +210,7 @@ END//
 
 CREATE PROCEDURE registerUser(
  	userID CHAR(14),
-    passwd VARCHAR(54),
+    passwd VARCHAR(100),
 	lastName VARCHAR(15),
 	firstName VARCHAR(15),
 	address VARCHAR(50),

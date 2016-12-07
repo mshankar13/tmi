@@ -27,6 +27,12 @@
                 </fieldset>
             </form>
             {% else %}
+                <form class="pure-menu-item" method="post" action="/search">
+                    <fieldset>
+                        {{ searchform.search }}
+                        {{ searchform.submit }}
+                    </fieldset>
+                </form>
                 <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
                              <a href="#" class="pure-menu-link">
                                  {{ current_user.userID }}

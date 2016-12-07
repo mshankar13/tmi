@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <div class="content">
+        <h2 class="content-subhead">From: {{ current_user.userID }}</h2>
+        <h2 class="content-subhead">To: {{ user }}</h2>
+        <div class="post">
+            {% if not messages %}
+                <h2 class="post-title">No Messages</h2>
+            {% endif %}
+            {% set subject = '' %}
+
+            {% for msg in messages %}
+                {% if subject!=msg.MSubject  %}
+                    {% set subject=msg.MSubject %}
+                    <h2 class="post-title">{{ subject }}</h2>
+                {% endif %}
+                    <div></div>
+                    <div class="post-description">
+                        {{ msg.MSenderId + ': ' +msg.MContent }}
+                    </div>
+            {% endfor %}
+        </div>
+        <form class="pure-form pure-form-stacked" method="post" action="/message/{{ user }}">
+            {{ message.hidden_tag() }}
+            {{ message.subject.label }}
+            {% for error in message.subject.errors %}
+                {{ error }}
+            {% endfor %}
+
+            {{ message.subject }}
+
+            {{ message.content }}
+            {% for error in message.content.errors %}
+                {{ error }}
+            {% endfor %}
+            {{ message.submit }}
+        </form>
+    </div>
+
+{% endblock %}

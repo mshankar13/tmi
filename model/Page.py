@@ -4,7 +4,7 @@ from model.Group import Group
 class Page(db.Model):
     __tablename__ = 'Page'
     pageID = db.Column(db.INT, primary_key=True,autoincrement=True )
-    Powner = db.Column(db.CHAR(14))
+    Powner = db.Column(db.CHAR(14), db.ForeignKey('User.userID'))
     fGroup = db.Column(db.INT, db.ForeignKey('Group.groupID'))
     postCount = db.Column(db.INT)
 

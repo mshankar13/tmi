@@ -125,6 +125,19 @@ a.pure-button-primary {
     color: #AECFE5;
 }
 
+/*
+ * -- MESSAGE STYLES --
+ * I want to customize how my .pure-message looks at the top of the page
+ */
+.message-item {
+
+}
+.person {
+
+}
+.message-contents {
+
+}
 
 /*
  * -- SPLASH STYLES --
@@ -278,5 +291,9 @@ a.pure-button-primary {
     /* We increase the header font size even more */
     .splash-head {
         font-size: 300%;
+    }
+
+    #message-list {
+
     }
 }

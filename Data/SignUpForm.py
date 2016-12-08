@@ -20,5 +20,7 @@ class SignUpForm(FlaskForm):
      "IN","KS","KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT","NC","ND","NE",
      "NH","NJ","NM","NV","NY", "OH","OK","OR","PA","PR","PW","RI","SC","SD","TN","TX",
      "UT","VA","VI","VT","WA","WI","WV","WY"]
+    userType = StringField('User Type')
+    userTypes = ["manager","company","user"]
     submit = SubmitField('Submit')
 

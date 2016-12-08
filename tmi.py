@@ -35,7 +35,10 @@ def load_user(userID):
 def index():
     login = LoginForm()
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        if current_user.userType == 'manager':
+            return redirect(url_for('manager'))
+        elif current_user.userType == 'user':
+            return redirect(url_for('home'))
     if request.method == 'GET':
         return render_template('index.html', title='Welcome', login=login)
 
@@ -62,6 +65,31 @@ def home():
         else:
             return render_template('home.html', posts=posts, formpost=makepost, searchForm=search)
         return redirect(url_for('home'))
+
+
+# Manager Home Page
+@app.route('/manager')
+@login_required
+def manager():
+    return render_template('manager.html')
+
+
+# Employee Home Page
+@app.route('/employee')
+@login_required
+def employee():
+    return render_template('employee.html')
+
+
+
+# add_employee method
+@app.route('/AddEmployee', methods=['GET','POST'])
+@login_required
+def add_employee():
+    if request.method =='GET':
+        return render_template('AddEmployee.html')
+    elif request.method == 'POST':
+        return render_template('AddEmployee.html')
 
 
 @app.route('/logout')
@@ -110,7 +138,6 @@ def search():
 
 
 # send message
-
 @app.route('/message/<username>', methods=['POST', 'GET'])
 @login_required
 def message(username):

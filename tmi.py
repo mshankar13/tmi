@@ -10,6 +10,7 @@ from database import create_app
 from model.User import User, db
 from model.Page import Page
 from model.Post import Post
+from model.Employee import P
 from model.Messages import Message
 from model.Group import Group
 from os import environ
@@ -81,15 +82,20 @@ def employee():
     return render_template('employee.html')
 
 
-
 # add_employee method
-@app.route('/AddEmployee', methods=['GET','POST'])
+@app.route('/AddEmployee', methods=['GET', 'POST'])
 @login_required
 def add_employee():
-    if request.method =='GET':
-        return render_template('AddEmployee.html')
+    form = SignUpForm()
+    if request.method == 'GET':
+        return render_template('AddEmployee.html', title='Add User', form=form)
     elif request.method == 'POST':
-        return render_template('AddEmployee.html')
+        # if the data submitted is valid
+        if form.validate():
+            Employee.addEmployee()
+            return render_template('AddEmployee.html', title='Add User', form=form)
+
+
 
 
 @app.route('/logout')

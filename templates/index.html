@@ -27,6 +27,9 @@
                 </fieldset>
             </form>
             {% else %}
+                <li class="pure-menu-item ">
+                <a href="/group" class="pure-menu-link">Groups</a>
+                </li>
                 <form class="pure-menu-item" method="post" action="/search">
                     <fieldset>
                         {{ searchform.search }}

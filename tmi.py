@@ -4,12 +4,14 @@ from Data.LoginForm import LoginForm
 from Data.PostForm import PostForm
 from Data.SearchForm import SearchForm
 from Data.SignUpForm import SignUpForm
+from Data.GroupForm import GroupForm
 from Data.MessageForm import MessageForm
 from database import create_app
 from model.User import User, db
 from model.Page import Page
 from model.Post import Post
 from model.Messages import Message
+from model.Group import Group
 from os import environ
 
 app = Flask(__name__)
@@ -71,7 +73,6 @@ def logout():
 
 # signup page
 @app.route('/signup', methods=['GET', 'POST'])
-
 def signup():
     login = LoginForm()
     form = SignUpForm()
@@ -95,6 +96,7 @@ def login():
     elif request.method == 'POST':
         return signinUser(login)
 
+
 # search users
 @app.route('/search', methods=['POST'])
 @login_required
@@ -104,35 +106,71 @@ def search():
         users = User.query.filter(User.userID.like(request.form['search'])).all()
     else:
         users = User.query.all()
-    return render_template('Users.html', users=users, searchform = search)
+    return render_template('Users.html', users=users, searchform=search)
+
 
 # send message
 
-@app.route('/message/<username>', methods=['POST','GET'])
+@app.route('/message/<username>', methods=['POST', 'GET'])
 @login_required
 def message(username):
     search = SearchForm()
 
-    messages = Message.query.filter(db.or_(db.and_(Message.MSenderId==current_user.userID, Message.MReceiverId==username),\
-                                   db.and_(Message.MReceiverId==current_user.userID,Message.MSenderId==username)))\
-                                    .order_by(Message.MSubject,Message.MDate).all()
+    messages = Message.query.filter(
+        db.or_(db.and_(Message.MSenderId == current_user.userID, Message.MReceiverId == username), \
+               db.and_(Message.MReceiverId == current_user.userID, Message.MSenderId == username))) \
+        .order_by(Message.MSubject, Message.MDate).all()
 
     message = MessageForm()
     if request.method == 'GET':
-        return render_template('message.html', user=username,message=message,messages=messages, searchform=search)
+        return render_template('message.html', user=username, message=message, messages=messages, searchform=search)
 
     if request.method == 'POST':
         if message.validate():
             conn = db.engine.raw_connection()
             cursor = conn.cursor()
-            cursor.callproc('SendMessage', args=[message.subject.data,message.content.data,current_user.userID,username])
+            cursor.callproc('SendMessage',
+                            args=[message.subject.data, message.content.data, current_user.userID, username])
             cursor.close()
             conn.commit()
-            return redirect(url_for('message',username=username))
+            return redirect(url_for('message', username=username))
         else:
-            return render_template('message.html', user=username, searchform=search, message=message,messages=messages)
+            return render_template('message.html', user=username, searchform=search, message=message, messages=messages)
+def is_admin():
+    return current_user.userType == 'manager'
+
+@app.route('/group', methods=['GET', 'POST'])
+@login_required
+def group():
+    groupForm = GroupForm()
+    search = SearchForm()
+    groups = Group.query.all()
+    if request.method == 'GET':
+        return render_template('groups.html', searchform=search, groupForm=groupForm, groups=groups)
+    if request.method == 'POST':
+        if groupForm.validate():
+            conn = db.engine.raw_connection()
+            cursor = conn.cursor()
+            cursor.callproc('createGroup',
+                            args=[groupForm.name.data, 'organization',
+                                  'public', current_user.userID])
+            cursor.execute('SELECT @groupID')
+            groupID = cursor.fetchone()
+            cursor.close()
+            conn.commit()
+            return redirect(url_for('groups', groupName=groupForm.name.data, groups=groups))
+        else:
+            return render_template('groups.html', groupForm=groupForm, searchform=search)
 
 
+@app.route('/groups/<int:groupID>', methods=['GET', 'POST'])
+def groups(groupID):
+    if request.method=='GET':
+        search = SearchForm()
+        makePost = PostForm()
+        page=Page.query.filter(Page.fGroup==groupID).first()
+        posts= Post.query.filter(Post.pageID==page.pageID).order_by(Post.postDate.desc()).all()
+        return render_template('group_page.html', searchform=search, formpost=makePost,posts=posts)
 
 
 def signinUser(login):

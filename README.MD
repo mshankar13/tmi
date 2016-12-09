@@ -4,26 +4,28 @@
 -   [ ] **~~Everything~~**
 -   [x] **Connect to Database**
 -   **Setup Model Classes:**
-    - [ ] User
-    - [ ] Groups
-    - [ ] Pages
+    - [x] User
+    - [x] Groups
+    - [x] Pages
 -   **Add User Sessions:**
     -   [x] Log in
-    -   [ ] Log out
+    -   [x] Log out
 -   **Create dynamic pages for user interaction:**
     -   [x] Index
-    -   [ ] Home
-    -   [ ] Messages
+    -   [x] Home
+    -   [x] Messages
     -   [ ] Market
     -   [ ] Profile
-    -   [ ] Friend List
+    -   [ ] ~~Friend List~~
 -   **Handle user interactions:**
-    -   [ ] Add Friends
+    -   [ ] ~~Add Friends~~
     -   [ ] Buy Stuff
-    -   [ ] Message Friends
-    -   [ ] Create Groups
-    -   [ ] Search Users
+    -   [x] Message Friends
+    -   [x] Create Groups
+    -   [x] Search Users
     -   [ ] List for sell
+    -   [ ] like/unlike post and comments
+
 
 ###Setup:
 1.  **Install Python 3.5:**

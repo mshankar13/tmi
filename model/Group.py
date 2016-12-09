@@ -17,3 +17,11 @@ class Group(db.Model):
         self.Gstatus = gstatus
         self.Gowner = gowner
 
+    @staticmethod
+    def addUser(groupID, user):
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        cursor.callproc('joinGroup', args=[user.userID,'user',groupID])
+        cursor.close()
+        conn.commit()
+

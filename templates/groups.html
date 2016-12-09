@@ -17,22 +17,28 @@
                 </form>
             </div>
             <div class="pure-u-2-3">
-                <div class="pure-menu"></div>
-                <ul class="pure-menu-list">
+                <div class="pure-menu pure-u-1-5">
                     {% if not groups %}
                         <h2 class="content-head">No Groups</h2>
+                    {% else %}
+                        <ul class="pure-menu-list ">
+                            {% for group in groups %}
+                                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                                    <a href="/groups/{{ group.groupID }}" class="pure-menu-link">
+                                        {{ group.groupName }}
+                                    </a>
+                                    <ul class="pure-menu-children">
+                                        <li class="pure-menu-item">
+                                            <a href="join/{{ group.groupID }}" class="pure-menu-link">
+                                                Join
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     {% endif %}
-                    {% for group in groups %}
-                        <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
-                            <div class="pure-g">
-
-                                <a href="/groups/{{ group.groupID }}" class="pure-menu-link pure-u-1-2">{{ group.groupName }}</a>
-                                <a class="pure-u-1-2" style="align-self: center">Owner: {{ group.Gowner }}</a>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+                </div>
             </div>
         </div>
-    </div>
 {% endblock %}

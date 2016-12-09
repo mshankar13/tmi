@@ -12,6 +12,7 @@ from model.Page import Page
 from model.Post import Post
 from model.Messages import Message
 from model.Group import Group
+from model.Member import Member
 from os import environ
 
 app = Flask(__name__)
@@ -170,8 +171,16 @@ def groups(groupID):
         makePost = PostForm()
         page=Page.query.filter(Page.fGroup==groupID).first()
         posts= Post.query.filter(Post.pageID==page.pageID).order_by(Post.postDate.desc()).all()
-        return render_template('group_page.html', searchform=search, formpost=makePost,posts=posts)
+        members = db.session.query(User,Member).filter(User.userID==Member.userID,Member.groupID==groupID).all()
+        return render_template('group_page.html', searchform=search, formpost=makePost,posts=posts,members=members,groupID=groupID)
+@app.route('/join/<int:groupID>')
+def join(groupID):
+    Group.addUser(groupID,current_user)
+    return redirect(url_for('groups'), groupID=groupID)
 
+@app.route('/groups/<int:groupID>/users')
+def group_users():
+    pass
 
 def signinUser(login):
     if login.validate():

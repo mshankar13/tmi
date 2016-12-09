@@ -1,6 +1,5 @@
-create schema tmi;
 use tmi;
-CREATE TABLE `User` (
+/*CREATE TABLE `User` (
     userID CHAR(14),
     passwd VARCHAR(100),
     lastName VARCHAR(15),
@@ -568,11 +567,11 @@ CREATE PROCEDURE UnlikeComment (
     SET `Comment`.likesCount = likesCount - 1
     WHERE `Comment`.commentID = CommentId;
     END //
-
+*/
 ###-----------------------MANAGER  TRANSACTIONS--------------####
 DELIMITER //
 #Add Employee
-CREATE PROCEDURE AddEmployee(
+/*CREATE PROCEDURE AddEmployee(
 	SSN INT,
     UserID CHAR(14),
     FirstName CHAR(50),
@@ -597,21 +596,19 @@ CREATE PROCEDURE AddEmployee(
 
 
 #Update Employee Info 
-
+*/
 
 #Remove Employee
-CREATE PROCEDURE RemoveEmployee(
+/*CREATE PROCEDURE RemoveEmployee(
 	SSN INT,
     UserID CHAR(14)
 	)
     BEGIN
 		DELETE FROM Employee  WHERE SSN=SSN;
-DELETE FROM `USER` 
-WHERE
-    UserID = UserID;
 	END//
-    
+*/
 #Obtain Sales Report for a Month-query filter
+
 
     
 #Produce listing of all items being advertised on the site-dislaying
@@ -626,7 +623,7 @@ WHERE
     
 ###-----------------------EMPLOYEE TRANSACTIONS--------------####
 #Create an advertisement
-CREATE PROCEDURE createAdvertisement(
+/*CREATE PROCEDURE createAdvertisement(
 	EmployeeID INT,
     MerchandiseType CHAR(50),
     CName CHAR(50),
@@ -660,12 +657,14 @@ CREATE PROCEDURE recordTransaction(
         INSERT INTO Sales(DatePurchase,AdvertisementID,NumberOfUnits,TotalPrice,AccountNumber,UserName)
         VALUES (t,AdvertisementID,NumberofUnits,0,AccountNumber,UserName);
 UPDATE Sales S,
-    Advertisements A 
+    AdvertisementRemoveEmployees A 
 SET 
     S.TotalPrice = S.NumberofUnits * A.unitPrice
 WHERE
     A.AdvertisementID = S.AdvertisementID;
     END//
+
+
 
 #Add, Edit and DEmployeeelete information for a customer
 #Produce customer mailing lists
@@ -676,7 +675,7 @@ WHERE
 #Best-Seller list of items
 #Personalized item suggestion list
     
-	
+*/	
     
     
 

@@ -7,6 +7,7 @@ from Data.SignUpForm import SignUpForm
 from Data.GroupForm import GroupForm
 from Data.MessageForm import MessageForm
 from Data.AddEmployeeForm import AddEmployeeForm
+from Data.RemoveEmployeeForm import RemoveEmployeeForm
 from database import create_app
 from model.User import User, db
 from model.Page import Page
@@ -81,12 +82,93 @@ def home():
 def manager():
     return render_template('manager.html')
 
-
 # Employee Home Page
 @app.route('/employee')
 @login_required
 def employee():
     return render_template('employee.html')
+
+# add_employee method
+@app.route('/addEmployee', methods=['GET', 'POST'])
+@login_required
+def add_employee():
+    login = LoginForm()
+    form = AddEmployeeForm()
+    if request.method == 'GET':
+        return render_template('addEmployee.html', title='Add Employee', form=form, login=login)
+    elif request.method == 'POST':
+        if form.validate():
+            Employee.addEmployee(form)
+            return redirect(url_for('displayEmployees'))
+        else:
+            return render_template('addEmployee.html', title='Add Employee', form=form, login=login)
+
+
+# remove employee
+@app.route('/removeEmployee', methods=['GET', 'POST'])
+@login_required
+def remove_employee():
+    login = LoginForm()
+    form = RemoveEmployeeForm()
+    if request.method == 'GET':
+        return render_template('removeEmployee.html',title='Remove Employee', form=form, login=login)
+    elif request.method == 'POST':
+        if form.validate():
+            Employee.removeEmployee(form)
+            return redirect(url_for('displayEmployees'))
+        else:
+            return render_template('removeEmployee.html', title='Remove Employee', form=form, login=login)
+
+# edit employee
+
+
+# Obtain Sales Report
+@app.route('/salesReportMonth', methods =['GET','POST'])
+@login_required
+def salesReportMonth():
+    if request.method == 'POST':
+        return render_template('salesReportMonth.html')
+    elif request.method == 'GET':
+        return render_template('salesReportMonth.html')
+
+
+# Obtain advertised list
+@app.route('/salesReportMonth', methods =['GET','POST'])
+@login_required
+def advertisedList():
+    if request.method == 'POST':
+        return render_template('displayAdvertisedList.html')
+    elif request.method == 'GET':
+        return render_template('displayAdvertisedList.html')
+
+
+# List of Transaction By ItemName
+
+# List of Transactions By UserName
+
+# List of Customers Who purchased a particular item
+
+# List items being sold for a given company
+
+
+# Record a transaction
+
+
+# Create Advertisement
+@app.route('/createAdvertisement',methods=['GET','POST'])
+@login_required
+def createAdvertisement():
+    if request.method == 'POST':
+        return render_template('createAdvertisement.html')
+    elif request.method == 'GET':
+        return render_template('createAdvertisement.html')
+
+
+# Remove Advertisement
+
+
+
+
 
 
 # Display all Employees in the Employee Table
@@ -97,32 +179,7 @@ def displayEmployees():
         return render_template('displayEmployees.html',employees=employees)
 
 
-# add_employee method
-@app.route('/addEmployee', methods=['GET', 'POST'])
-@login_required
-def add_employee():
-    login = LoginForm()
-    form = AddEmployeeForm()
-    if request.method == 'GET':
-        return render_template('addEmployee.html', title='Sign Up', form=form, login=login)
-    elif request.method == 'POST':
-        if form.validate():
-            Employee.addEmployee(form)
-            return redirect(url_for('displayEmployees'))
-        else:
-            return render_template('addEmployee.html', title='Sign Up', form=form, login=login)
 
-
-# remove employee
-@app.route('/removeEmployee', methods=['GET', 'POST'])
-@login_required
-def remove_employee():
-    if request.method == 'POST':
-        return render_template('removeEmployee.html')
-    elif request.method == 'GET':
-        return render_template('removeEmployee.html')
-
-# Obtain Sales Report
 
 
 

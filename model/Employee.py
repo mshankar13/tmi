@@ -51,6 +51,17 @@ class Employee(db.Model):
         cursor.close()
         connection.commit()
 
+    @staticmethod
+    def removeEmployee(form):
+        connection = db.engine.raw_connection()
+        cursor = connection.cursor()
+        cursor.callproc('RemoveEmployee', [form.socialsecurity.data
+                                            ])
+        cursor.close()
+        connection.commit()
+
+
+
 
 
 

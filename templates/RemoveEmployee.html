@@ -2,7 +2,25 @@
 
 {% block content %}
 <!--MANAGER LEVEL TRANSACTIONS SPECIFIED ON THIS PAGE-->
-<div class="content">
-    you want to remove an employee
+<div class="content pure-u-1-3">
+
+        <h2 class="content-head">Remove an Employee From Database</h2>
+        <p>Enter in Social Security # & UserName of Employee to Remove</p>
+        <form class="pure-form pure-form-stacked" method="POST" action="/removeEmployee" >
+            {{ form.hidden_tag() }}
+
+
+
+                {{ form.socialsecurity.label }}
+                {% if form.socialsecurity.errors %}
+                    {% for error in form.socialsecurity.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+                {{ form.socialsecurity }}
+
+
+                {{ form.submit }}
+        </form>
 </div>
 {% endblock %}

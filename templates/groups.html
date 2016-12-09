@@ -17,22 +17,41 @@
                 </form>
             </div>
             <div class="pure-u-2-3">
-                <div class="pure-menu"></div>
-                <ul class="pure-menu-list">
+                <div class="pure-menu pure-u-1-5">
                     {% if not groups %}
                         <h2 class="content-head">No Groups</h2>
-                    {% endif %}
-                    {% for group in groups %}
-                        <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
-                            <div class="pure-g">
+                    {% else %}
+                        <ul class="pure-menu-list ">
+                            {% for group in groups %}
+                                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                                    <a href="/groups/{{ group.groupID }}" class="pure-menu-link">
+                                        {{ group.groupName }}
+                                    </a>
+                                    <ul class="pure-menu-children">
+                                        {% if (group.groupID,) not in mygroups %}
+                                        <li class="pure-menu-item">
+                                            <a href="join/{{ group.groupID }}" class="pure-menu-link">
+                                                Join
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if current_user.userID==group.Gowner %}
+                                            <li class="pure-menu-item">
+                                                <form action="/group/rename/{{ group.groupID }}" method="POST">
+                                                    <input name="rename" class="pure-input-rounded" type="text" placeholder="rename">
+                                                </form>
+                                            </li>
+                                            <li class="pure-menu-item">
+                                                <a href="/group/delete/{{ group.groupID }}" class="pure-menu-link">Delete</a>
+                                            </li>
 
-                                <a href="/groups/{{ group.groupID }}" class="pure-menu-link pure-u-1-2">{{ group.groupName }}</a>
-                                <a class="pure-u-1-2" style="align-self: center">Owner: {{ group.Gowner }}</a>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+                                        {% endif %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
 {% endblock %}

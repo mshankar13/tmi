@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Home Page">
     <title>{% block title %}{{ title }}{% endblock %} - TMI</title>
-    <link rel="stylesheet" href="../static/css/pure.css">
-    <link rel="stylesheet" href="../static/css/grids-responsive.css">
-    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href={{ url_for('static',filename='css/pure.css') }}>
+    <link rel="stylesheet" href={{ url_for('static',filename='css/grids-responsive.css') }}>
+    <link rel="stylesheet" href={{ url_for('static',filename='css/font-awesome.css') }}>
     <!--[if gt IE 8]><!-->
-    <link rel="stylesheet" href="../static/css/layouts/marketing.css">
+    <link rel="stylesheet" href={{ url_for('static',filename='css/layouts/marketing.css') }}>
     <!--<![endif]-->
 </head>
 <body>

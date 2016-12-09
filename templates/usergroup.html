@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% block content %}
+   <div class="content pure-u-3-5 pure-u-md-1-3">
+        <h2 class="content-head">Add Users</h2>
+        <div class="pure-menu">
+            <ul class="pure-menu-list">
+                {% for user in users %}
+                    <li class="pure-menu-item">
+                        <a href="/groups/{{ group.groupID }}/users/{{ user.userID }}" class="pure-menu-link">
+                            {{ user.userID }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

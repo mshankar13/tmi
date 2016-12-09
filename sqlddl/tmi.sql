@@ -466,7 +466,7 @@ end//
 	
 create procedure removeMyComment(
 	userID char(14),
-    commentID int
+  commentID int
 )
 begin
 	if (select C.author from `comment` C where commentID=C.commentID)=userID

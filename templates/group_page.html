@@ -34,21 +34,76 @@
                     </fieldset>
                 </form>
             </div>
-        <div class="pure-u-1-3">
-            <a href="/groups/{{ groupID }}/users" class="pure-button pure-button-primary">Add Users</a>
-        </div>
-        <div class="pure-u-1-3">
-            <form class="pure-form pure-form-stacked" style="position: absolute" method="post"action="/groups/{{ groupID }}">
+            <div class="pure-u-1-3">
+                <a href="/groups/{{ groupID }}/users" class="pure-button pure-button-primary">Add Users</a>
+            </div>
+            <div class="pure-u-1-3">
+
                 {% for post in posts %}
                     <div class="post">
-                        <div class="post-description">
-                            {{ post.content }}
+                        <div class="pure-menu">
+                            <ul class="pure-menu-list">
+                                <li class="pure-menu-item">
+                                    <div class="post-description">
+                                        <div class="pure-menu pure-menu-horizontal">
+                                            <ul class="pure-menu-list">
+                                                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                                                    <a href="#">x</a>
+                                                    <ul class="pure-menu-children">
+                                                        <li class="pure-menu-item">
+                                                            <a href="/groups/{{ groupID }}/del/{{ post.postID }}"
+                                                               class="pure-menu-link">Delete</a>
+                                                        </li>
+                                                        <li class="pure-menu-item">
+                                                            <form class=>
+                                                                <input class="" type="text" placeholder="edit">
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            {{ post.owner +': '+ post.content }}
+                                        </div>
+                                        {% for comment in comments %}
+                                            {% if comment.postID == post.postID %}
+                                                <div style="text-indent: 4em">
+                                                    <div class="pure-menu pure-menu-horizontal">
+                                                        <ul class="pure-menu-list">
+                                                            <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                                                                <a href="#">x</a>
+                                                                <ul class="pure-menu-children">
+                                                                    <li class="pure-menu-item">
+                                                                        <a href="/groups/{{ groupID }}/{{ comment.postID }}/del/{{ comment.commentID }}"
+                                                                           class="pure-menu-link">Delete</a>
+                                                                    </li>
+                                                                    <li class="pure-menu-item">
+                                                                        <form class=>
+                                                                            <input class="" type="text"
+                                                                                   placeholder="edit">
+                                                                        </form>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                        {{ comment.author+': '+comment.content }}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
 
+                                    </div>
+                                </li>
+                                <li class="pure-menu-item">
+                                    <form action="/groups/{{ groupID }}/{{ post.postID }}" method="post"
+                                          class="pure-form" style="text-indent: 4em">
+                                        <input type="text" name="comment">
+                                    </form>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 {% endfor %}
-            </form>
-        </div>
+            </div>
         </div>
 
 

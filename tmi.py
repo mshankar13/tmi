@@ -159,37 +159,24 @@ def group():
             groupID = cursor.fetchone()
             cursor.close()
             conn.commit()
-            return redirect(url_for('groups', groupID=groupID[0]))
+            return redirect(url_for('groups', groupName=groupForm.name.data, groups=groups))
         else:
             return render_template('groups.html', groupForm=groupForm, searchform=search)
 
 
 @app.route('/groups/<int:groupID>', methods=['GET', 'POST'])
 def groups(groupID):
-    makePost = PostForm()
-    search = SearchForm()
-    page = Page.query.filter(Page.fGroup == groupID).first()
-    posts = Post.query.filter(Post.pageID == page.pageID).order_by(Post.postDate.desc())
-    members = db.session.query(User, Member).filter(User.userID == Member.userID, Member.groupID == groupID).all()
     if request.method=='GET':
+        search = SearchForm()
+        makePost = PostForm()
+        page=Page.query.filter(Page.fGroup==groupID).first()
         posts= Post.query.filter(Post.pageID==page.pageID).order_by(Post.postDate.desc()).all()
+        members = db.session.query(User,Member).filter(User.userID==Member.userID,Member.groupID==groupID).all()
         return render_template('group_page.html', searchform=search, formpost=makePost,posts=posts,members=members,groupID=groupID)
-    elif request.method == 'POST':
-        userID = current_user.userID
-        if makePost.validate():
-            connection = db.engine.raw_connection()
-            cursor = connection.cursor()
-            cursor.callproc('postOnGroup', [current_user.userID, groupID, makePost.post.data])
-            cursor.close()
-            connection.commit()
-        else:
-            return render_template('group_page.html', posts=posts, formpost=makePost, searchform=search, members=members, groupID=groupID)
-        return redirect(url_for('groups', groupID=groupID))
-
 @app.route('/join/<int:groupID>')
 def join(groupID):
     Group.addUser(groupID,current_user)
-    return redirect(url_for('groups', groupID=groupID))
+    return redirect(url_for('groups'), groupID=groupID)
 
 @app.route('/groups/<int:groupID>/users')
 def group_users():

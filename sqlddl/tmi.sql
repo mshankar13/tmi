@@ -398,7 +398,7 @@ CREATE PROCEDURE joinGroup(
 )
 Begin
 	declare t varchar(15);
-    select G.Gstatus into t from fgroup G where G.groupID=groupID;
+    select G.Gstatus into t from fGroup G where G.groupID=groupID;
     if t = 'public'
     then
 		call ownerAddUser(userID,'user',groupID);

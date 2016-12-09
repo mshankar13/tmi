@@ -28,11 +28,13 @@
                                         {{ group.groupName }}
                                     </a>
                                     <ul class="pure-menu-children">
+                                        {% if (group.groupID,) not in mygroups %}
                                         <li class="pure-menu-item">
                                             <a href="join/{{ group.groupID }}" class="pure-menu-link">
                                                 Join
                                             </a>
                                         </li>
+                                        {% endif %}
                                     </ul>
                                 </li>
                             {% endfor %}

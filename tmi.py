@@ -137,8 +137,9 @@ def message(username):
             return redirect(url_for('message', username=username))
         else:
             return render_template('message.html', user=username, searchform=search, message=message, messages=messages)
-def is_admin():
-    return current_user.userType == 'manager'
+
+
+
 
 @app.route('/group', methods=['GET', 'POST'])
 @login_required
@@ -146,8 +147,9 @@ def group():
     groupForm = GroupForm()
     search = SearchForm()
     groups = Group.query.all()
+    mygroups = Member.query.with_entities(Member.groupID).filter(Member.userID == current_user.userID).all()
     if request.method == 'GET':
-        return render_template('groups.html', searchform=search, groupForm=groupForm, groups=groups)
+        return render_template('groups.html', searchform=search, groupForm=groupForm, groups=groups, mygroups=mygroups)
     if request.method == 'POST':
         if groupForm.validate():
             conn = db.engine.raw_connection()
@@ -159,28 +161,57 @@ def group():
             groupID = cursor.fetchone()
             cursor.close()
             conn.commit()
-            return redirect(url_for('groups', groupName=groupForm.name.data, groups=groups))
+            return redirect(url_for('groups', groupID=groupID[0]))
         else:
             return render_template('groups.html', groupForm=groupForm, searchform=search)
 
 
 @app.route('/groups/<int:groupID>', methods=['GET', 'POST'])
 def groups(groupID):
-    if request.method=='GET':
+    group = Group.query.filter(Group.groupID==groupID).first()
+    if request.method == 'GET':
         search = SearchForm()
         makePost = PostForm()
-        page=Page.query.filter(Page.fGroup==groupID).first()
-        posts= Post.query.filter(Post.pageID==page.pageID).order_by(Post.postDate.desc()).all()
-        members = db.session.query(User,Member).filter(User.userID==Member.userID,Member.groupID==groupID).all()
-        return render_template('group_page.html', searchform=search, formpost=makePost,posts=posts,members=members,groupID=groupID)
-@app.route('/join/<int:groupID>')
-def join(groupID):
-    Group.addUser(groupID,current_user)
-    return redirect(url_for('groups'), groupID=groupID)
+        page = Page.query.filter(Page.fGroup == groupID).first()
+        posts = Post.query.filter(Post.pageID == page.pageID).order_by(Post.postDate.desc()).all()
+        members = db.session.query(User, Member).filter(User.userID == Member.userID, Member.groupID == groupID).all()
+        return render_template('group_page.html', searchform=search, formpost=makePost, posts=posts, members=members,
+                               group=group)
 
-@app.route('/groups/<int:groupID>/users')
-def group_users():
-    pass
+
+@app.route('/join/<int:groupID>', methods=['GET'])
+def join(groupID):
+    Group.addUser(groupID, current_user)
+    return redirect(url_for('groups', groupID=groupID))
+
+
+@app.route('/groups/<int:groupID>/users/', methods=['GET'])
+def group_users(groupID):
+    search = SearchForm()
+    group = Group.query.filter(Group.groupID==groupID).first()
+    users = User.query.filter(User.userID.notin_(db.session.query(Member.userID).filter(Member.groupID==groupID))).all()
+    return render_template('usergroup.html',searchform=search,group=group, users=users)
+
+@app.route('/groups/<int:groupID>/users/<string:userID>')
+def add_to_group(groupID,userID):
+    conn = db.engine.raw_connection()
+    cursor = conn.cursor()
+    cursor.callproc('ownerAddUser', args=[userID,'user',groupID])
+    cursor.close()
+    conn.commit()
+    return redirect(url_for('group_users',groupID=groupID))
+
+
+
+
+@app.route('/groups/<int:groupID>/delete/<string:userID>', methods=['GET'])
+def remove_user(groupID,userID):
+    conn = db.engine.raw_connection()
+    cursor = conn.cursor()
+    cursor.callproc('ownerRemoveUser', args=[userID,groupID])
+    cursor.close()
+    conn.commit()
+    return redirect(url_for('groups',groupID=groupID))
 
 def signinUser(login):
     if login.validate():
@@ -193,7 +224,6 @@ def signinUser(login):
     else:
         print(login.errors)
         return render_template('login.html', login=login)
-
 
 if __name__ == '__main__':
     create_app(app)

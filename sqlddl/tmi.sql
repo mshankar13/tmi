@@ -422,8 +422,8 @@ begin
 	declare t datetime;
     declare pageID int;
     select now() into t;
-    select P.pageID into pageID from page P where P.fGroup = groupID;
-    if exists (select * from member M where M.groupID = groupId and M.userID = userID)
+    select P.pageID into pageID from Page P where P.fGroup = groupID;
+    if exists (select * from Member M where M.groupID = groupId and M.userID = userID)
     then
     INSERT INTO Post (`owner`,pageID,postDate,content,commentCount,likesCount)
     VALUES (userID,  pageID,  t, 
@@ -443,10 +443,10 @@ create procedure commentOnGroup(
 begin
 	declare pageID int;
     declare groupID int;
-    select P.pageID into pageID from post P where P.postID = postID;
+    select P.pageID into pageID from Post P where P.postID = postID;
     select P.fgroup into groupID from Page P where P.pageID = pageID;
     if groupID is not null
-    and exists(select* from member M where M.groupID = groupID and M.userID = author)
+    and exists(select* from Member M where M.groupID = groupID and M.userID = author)
     then
 		call ownerCommentPost(postID, content, author);
 	end if;

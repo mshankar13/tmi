@@ -172,16 +172,16 @@ def delete_message(userID,messageID):
 
 @app.route('/groups/<int:groupID>', methods=['GET', 'POST'])
 def groups(groupID):
-
     makePost = PostForm()
     search = SearchForm()
+    group = Group.query.filter(Group.groupID==groupID).first()
     page = Page.query.filter(Page.fGroup == groupID).first()
     posts = Post.query.filter(Post.pageID == page.pageID).order_by(Post.postDate.desc())
     comments = Comment.query.filter(Comment.postID.in_(db.session.query(Post.postID).filter(Post.pageID==page.pageID))).all()
     members = db.session.query(User, Member).filter(User.userID == Member.userID, Member.groupID == groupID).all()
     if request.method=='GET':
         posts= Post.query.filter(Post.pageID==page.pageID).order_by(Post.postDate.desc()).all()
-        return render_template('group_page.html', comments=comments, searchform=search, formpost=makePost,posts=posts,members=members,groupID=groupID)
+        return render_template('group_page.html', comments=comments, searchform=search, formpost=makePost,posts=posts,members=members,group=group)
     elif request.method == 'POST':
         userID = current_user.userID
         if makePost.validate():
@@ -191,13 +191,29 @@ def groups(groupID):
             cursor.close()
             connection.commit()
         else:
-            return render_template('group_page.html', posts=posts, formpost=makePost, searchform=search, members=members, groupID=groupID)
+            return render_template('group_page.html', posts=posts, formpost=makePost, searchform=search, members=members, group=group)
         return redirect(url_for('groups', groupID=groupID))
 
 @app.route('/join/<int:groupID>')
 def join(groupID):
     Group.addUser(groupID, current_user)
     return redirect(url_for('groups', groupID=groupID))
+
+@app.route('/groups/<int:groupID>/edit/<int:postID>',methods=['POST'])
+def edit_post(groupID,postID):
+    post = Post.query.filter(Post.postID==postID).first()
+    post.content = request.form['content']
+    db.session.commit()
+    return redirect(url_for('groups',groupID=groupID))
+
+@app.route('/groups/<int:groupID>/<int:postID>/edit/<int:commentID>', methods=['POST'])
+def edit_comment(groupID,postID,commentID):
+    comment = Comment.query.filter(Comment.commentID==commentID).first()
+    comment.content=request.form['content']
+    db.session.commit()
+    return redirect(url_for('groups', groupID=groupID))
+
+
 
 @app.route('/home/del/<int:postID>',methods=['GET'])
 def del_post(postID):

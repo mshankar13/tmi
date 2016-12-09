@@ -139,8 +139,6 @@ def message(username):
             return render_template('message.html', user=username, searchform=search, message=message, messages=messages)
 
 
-
-
 @app.route('/group', methods=['GET', 'POST'])
 @login_required
 def group():
@@ -165,10 +163,15 @@ def group():
         else:
             return render_template('groups.html', groupForm=groupForm, searchform=search)
 
+@app.route('/message/<string:userID>/delete/<int:messageID>', methods=['GET'])
+def delete_message(userID,messageID):
+    Message.query.filter(Message.MessageId==messageID).delete()
+    db.session.commit()
+    return redirect(url_for('message', username=userID))
 
 @app.route('/groups/<int:groupID>', methods=['GET', 'POST'])
 def groups(groupID):
-    group = Group.query.filter(Group.groupID==groupID).first()
+    group = Group.query.filter(Group.groupID == groupID).first()
     if request.method == 'GET':
         search = SearchForm()
         makePost = PostForm()
@@ -188,30 +191,45 @@ def join(groupID):
 @app.route('/groups/<int:groupID>/users/', methods=['GET'])
 def group_users(groupID):
     search = SearchForm()
-    group = Group.query.filter(Group.groupID==groupID).first()
-    users = User.query.filter(User.userID.notin_(db.session.query(Member.userID).filter(Member.groupID==groupID))).all()
-    return render_template('usergroup.html',searchform=search,group=group, users=users)
+    group = Group.query.filter(Group.groupID == groupID).first()
+    users = User.query.filter(
+        User.userID.notin_(db.session.query(Member.userID).filter(Member.groupID == groupID))).all()
+    return render_template('usergroup.html', searchform=search, group=group, users=users)
+
 
 @app.route('/groups/<int:groupID>/users/<string:userID>')
-def add_to_group(groupID,userID):
+def add_to_group(groupID, userID):
     conn = db.engine.raw_connection()
     cursor = conn.cursor()
-    cursor.callproc('ownerAddUser', args=[userID,'user',groupID])
+    cursor.callproc('ownerAddUser', args=[userID, 'user', groupID])
     cursor.close()
     conn.commit()
-    return redirect(url_for('group_users',groupID=groupID))
+    return redirect(url_for('group_users', groupID=groupID))
 
 
+@app.route('/group/rename/<int:groupID>',methods=['POST'])
+def rename_group(groupID):
+    group = Group.query.filter(Group.groupID == groupID).first()
+    group.groupName = request.form['rename']
+    db.session.commit()
+    return redirect(url_for('group'))
+
+@app.route('/group/delete/<int:groupID>',methods=['GET'])
+def delete_group(groupID):
+    Group.query.filter(Group.groupID==groupID).delete()
+    db.session.commit()
+    return redirect(url_for('group'))
 
 
 @app.route('/groups/<int:groupID>/delete/<string:userID>', methods=['GET'])
-def remove_user(groupID,userID):
+def remove_user(groupID, userID):
     conn = db.engine.raw_connection()
     cursor = conn.cursor()
-    cursor.callproc('ownerRemoveUser', args=[userID,groupID])
+    cursor.callproc('ownerRemoveUser', args=[userID, groupID])
     cursor.close()
     conn.commit()
-    return redirect(url_for('groups',groupID=groupID))
+    return redirect(url_for('groups', groupID=groupID))
+
 
 def signinUser(login):
     if login.validate():
@@ -224,6 +242,7 @@ def signinUser(login):
     else:
         print(login.errors)
         return render_template('login.html', login=login)
+
 
 if __name__ == '__main__':
     create_app(app)

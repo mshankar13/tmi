@@ -11,14 +11,28 @@
             {% set subject = '' %}
 
             {% for msg in messages %}
-                {% if subject!=msg.MSubject  %}
+                {% if subject!=msg.MSubject %}
                     {% set subject=msg.MSubject %}
                     <h2 class="post-title">{{ subject }}</h2>
                 {% endif %}
-                    <div></div>
-                    <div class="post-description">
-                        {{ msg.MSenderId + ': ' +msg.MContent }}
+                <div class="pure-g">
+                    <div class="pure-menu pure-menu-horizontal pure-u-1">
+                        <ul class="pure-menu-list">
+                            {% if msg.MSenderId==current_user.userID %}
+                                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                                    <a href="/message/{{ msg.MReceiverId }}/delete/{{ msg.MessageId }}">
+                                        <img class="pure-img pure-img-responsive"
+                                             src={{ url_for('static',filename='img/close.png') }}/>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li class="pure-menu-item">
+                                {{ msg.MSenderId + ': ' +msg.MContent }}
+                            </li>
+                        </ul>
                     </div>
+
+                </div>
             {% endfor %}
         </div>
         <form class="pure-form pure-form-stacked" method="post" action="/message/{{ user }}">

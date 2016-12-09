@@ -35,6 +35,17 @@
                                             </a>
                                         </li>
                                         {% endif %}
+                                        {% if current_user.userID==group.Gowner %}
+                                            <li class="pure-menu-item">
+                                                <form action="/group/rename/{{ group.groupID }}" method="POST">
+                                                    <input name="rename" class="pure-input-rounded" type="text" placeholder="rename">
+                                                </form>
+                                            </li>
+                                            <li class="pure-menu-item">
+                                                <a href="/group/delete/{{ group.groupID }}" class="pure-menu-link">Delete</a>
+                                            </li>
+
+                                        {% endif %}
                                     </ul>
                                 </li>
                             {% endfor %}

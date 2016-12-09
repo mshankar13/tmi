@@ -6,13 +6,14 @@ from Data.SearchForm import SearchForm
 from Data.SignUpForm import SignUpForm
 from Data.GroupForm import GroupForm
 from Data.MessageForm import MessageForm
+from Data.AddEmployeeForm import AddEmployeeForm
 from database import create_app
 from model.User import User, db
 from model.Page import Page
 from model.Post import Post
-from model.Employee import P
 from model.Messages import Message
 from model.Group import Group
+from model.Employee import Employee
 from os import environ
 
 app = Flask(__name__)
@@ -40,6 +41,8 @@ def index():
             return redirect(url_for('manager'))
         elif current_user.userType == 'user':
             return redirect(url_for('home'))
+        elif current_user.userType == 'employee':
+            return redirect(url_for('employee'))
     if request.method == 'GET':
         return render_template('index.html', title='Welcome', login=login)
 
@@ -58,6 +61,7 @@ def home():
         return render_template('home.html', posts=posts, formpost=makepost, searchform=search)
     elif request.method == 'POST':
         if makepost.validate():
+            # If user adds posts and the fields in the form valid then add post to database
             connection = db.engine.raw_connection()
             cursor = connection.cursor()
             cursor.callproc('ownerMakePost', [current_user.userID, makepost.post.data])
@@ -67,6 +71,9 @@ def home():
             return render_template('home.html', posts=posts, formpost=makepost, searchForm=search)
         return redirect(url_for('home'))
 
+
+
+#================================== MANAGER / USER TRANSACTIONS AND METHODS ======================================== #
 
 # Manager Home Page
 @app.route('/manager')
@@ -82,21 +89,45 @@ def employee():
     return render_template('employee.html')
 
 
+# Display all Employees in the Employee Table
+@app.route('/displayEmployees')
+@login_required
+def displayEmployees():
+        employees = Employee.query.all()
+        return render_template('displayEmployees.html',employees=employees)
+
+
 # add_employee method
-@app.route('/AddEmployee', methods=['GET', 'POST'])
+@app.route('/addEmployee', methods=['GET', 'POST'])
 @login_required
 def add_employee():
-    form = SignUpForm()
+    login = LoginForm()
+    form = AddEmployeeForm()
     if request.method == 'GET':
-        return render_template('AddEmployee.html', title='Add User', form=form)
+        return render_template('addEmployee.html', title='Sign Up', form=form, login=login)
     elif request.method == 'POST':
-        # if the data submitted is valid
         if form.validate():
-            Employee.addEmployee()
-            return render_template('AddEmployee.html', title='Add User', form=form)
+            Employee.addEmployee(form)
+            return redirect(url_for('displayEmployees'))
+        else:
+            return render_template('addEmployee.html', title='Sign Up', form=form, login=login)
+
+
+# remove employee
+@app.route('/removeEmployee', methods=['GET', 'POST'])
+@login_required
+def remove_employee():
+    if request.method == 'POST':
+        return render_template('removeEmployee.html')
+    elif request.method == 'GET':
+        return render_template('removeEmployee.html')
+
+# Obtain Sales Report
 
 
 
+
+# ==================================== END MANAGER/EMPLOYEE TRANSACTIONS ===================================#
 
 @app.route('/logout')
 @login_required

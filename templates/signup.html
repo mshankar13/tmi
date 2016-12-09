@@ -75,7 +75,11 @@
                 {{ form.state }}
 
                 {{ form.userType.label }}
-
+                {% if form.userType.errors %}
+                    {% for error in form.userType.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
                 {{ form.userType }}
 
                 {{ form.submit }}

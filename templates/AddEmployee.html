@@ -1,12 +1,14 @@
 {% extends "index.html" %}
 {% block content %}
-<h2 class="content-head">Add an Employee To Database</h2>
-        <form class="pure-form pure-form-stacked" method="POST" action="/add_employee">
+    <div class="content pure-u-1-3">
+
+        <h2 class="content-head">Add an Employee</h2>
+        <form class="pure-form pure-form-stacked" method="POST" action="/addEmployee" >
             <fieldset>
                 {{ form.hidden_tag() }}
 
                 {{ form.firstname.label }}
-                {% if form.firstname.errors %}
+                  {% if form.firstname.errors %}
                     {% for error in form.firstname.errors %}
                         {{ error }}
                     {% endfor %}
@@ -21,6 +23,7 @@
                 {% endif %}
                 {{ form.lastname }}
 
+
                 {{ form.email.label }}
                 {% if form.email.errors %}
                     {% for error in form.email.errors %}
@@ -28,6 +31,15 @@
                     {% endfor %}
                 {% endif %}
                 {{ form.email }}
+
+
+                {{ form.socialsecurity.label }}
+                {% if form.socialsecurity.errors %}
+                    {% for error in form.socialsecurity.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+                {{ form.socialsecurity }}
 
                 {{ form.username.label }}
                 {% if form.username.errors %}
@@ -45,6 +57,7 @@
                 {% endif %}
                 {{ form.password }}
 
+
                 {{ form.confirm.label }}
                 {{ form.confirm }}
 
@@ -56,6 +69,7 @@
                 {% endif %}
                 {{ form.address }}
 
+
                 {{ form.city.label }}
                 {% if form.city.errors %}
                     {% for error in form.city.errors %}
@@ -63,6 +77,14 @@
                     {% endfor %}
                 {% endif %}
                 {{ form.city }}
+
+                {{ form.zipcode.label }}
+                {% if form.zipcode.errors %}
+                    {% for error in form.zipcode.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+                {{ form.zipcode }}
 
                 {{ form.state.label }}
                 {% if form.state.errors %}
@@ -72,9 +94,31 @@
                 {% endif %}
                 {{ form.state }}
 
-                {{ form.userType.label }}
+                {{ form.telephone.label }}
+                {% if form.telephone.errors %}
+                    {% for error in form.telephone.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+                {{ form.telephone }}
 
-                {{ form.userType }}
+                {{ form.hourlypay.label }}
+                {% if form.hourlypay.errors %}
+                    {% for error in form.hourlypay.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+                {{ form.hourlypay }}
+
+
+                {{ form.company.label }}
+                {% if form.company.errors %}
+                    {% for error in form.company.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+                {{ form.company }}
+
 
                 {{ form.submit }}
             </fieldset>

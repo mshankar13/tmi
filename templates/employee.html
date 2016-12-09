@@ -1,22 +1,99 @@
 {% extends "index.html" %}
 
 {% block content %}
-<!--MANAGER LEVEL TRANSACTIONS SPECIFIED ON THIS PAGE-->
-<div class="content">
-
 <!--CUSTOMER-REPRESENTATIVE TRANSACTIONS SPECIFIED HERE-->
-You are a customer Rep
+<div class="content">
+<h1 style="text-align:center">Welcome Employee</h1>
 
 <!--44.Create an Advertisement-->
-<!--45.Delete an Advertisement-->
-<!--46.Record a transaction-->
-<!--47.Add,edit and delete info for a customer-->
-<!--48.Produce customer mailing lists-->
-<!--49.Produce a list of Item suggestions for a given customer-->
-<!--50.Retrieve a customers current groups-->
-<!--51.Each Customer account,the account history-->
-<!--52.Best Seller List of Items-->
-<!--53.Personalized Item Suggestion List-->
+   <form action="{{url_for('add_employee')}}" method=post>
+       <dl >
+           <dt><h3>Create new Advertisement</h3>
+                <dd><button class="pure-button">CREATE</button>
 
+       </dl>
+   </form>
+
+<!--45.Delete an Advertisement-->
+   <form action="{{url_for('add_employee')}}" method=post>
+       <dl >
+           <dt><h3>Delete an Advertisement</h3>
+                <dd><button class="pure-button">Delete</button>
+
+       </dl>
+   </form>
+
+
+<!--46.Record a transaction-->
+   <form action="{{url_for('add_employee')}}" method=post>
+       <dl >
+           <dt><h3>Record Transaction</h3>
+                <dd><button class="pure-button">Add Employee</button>
+
+       </dl>
+   </form>
+
+<!--47.Add,edit and delete info for a customer-->
+   <form action="{{url_for('add_employee')}}" method=post>
+       <dl >
+           <dt><h3>Add Employee</h3>
+                <dd><button class="pure-button">Add Employee</button>
+
+       </dl>
+   </form>
+
+<!--48.Produce customer mailing lists-->
+   <form action="{{url_for('add_employee')}}" method=post>
+       <dl >
+           <dt><h3>Add Employee</h3>
+                <dd><button class="pure-button">Add Employee</button>
+
+       </dl>
+   </form>
+
+<!--49.Produce a list of Item suggestions for a given customer-->
+   <form action="{{url_for('add_employee')}}" method=post>
+       <dl >
+           <dt><h3>Add Employee</h3>
+                <dd><button class="pure-button">Add Employee</button>
+
+       </dl>
+   </form>
+
+<!--50.Retrieve a customers current groups-->
+   <form action="{{url_for('add_employee')}}" method=post>
+       <dl >
+           <dt><h3>Add Employee</h3>
+                <dd><button class="pure-button">Add Employee</button>
+
+       </dl>
+   </form>
+
+<!--51.Each Customer account,the account history-->
+   <form action="{{url_for('add_employee')}}" method=post>
+       <dl >
+           <dt><h3>Add Employee</h3>
+                <dd><button class="pure-button">Add Employee</button>
+
+       </dl>
+   </form>
+
+<!--52.Best Seller List of Items-->
+   <form action="{{url_for('add_employee')}}" method=post>
+       <dl >
+           <dt><h3>List of Best Seller Items</h3>
+                <dd><button class="pure-button">Add Employee</button>
+
+       </dl>
+   </form>
+
+<!--53.Personalized Item Suggestion List-->
+   <form action="{{url_for('add_employee')}}" method=post>
+       <dl >
+           <dt><h3>Personalized List For A Customer</h3>
+                <dd><button class="pure-button">Add Employee</button>
+
+       </dl>
+   </form>
 </div>
 {% endblock %}

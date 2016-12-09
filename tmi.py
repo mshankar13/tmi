@@ -187,6 +187,12 @@ def join(groupID):
     Group.addUser(groupID, current_user)
     return redirect(url_for('groups', groupID=groupID))
 
+@app.route('/home/del/<int:postID>',methods=['GET'])
+def del_post(postID):
+    Post.query.filter(Post.postID==postID).delete()
+    db.session.commit()
+    return redirect(url_for('home'))
+
 
 @app.route('/groups/<int:groupID>/users/', methods=['GET'])
 def group_users(groupID):

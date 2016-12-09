@@ -240,20 +240,20 @@ BEGIN
 END//
 
 CREATE PROCEDURE createGroup(
-  OUT groupID INT,
 	groupName VARCHAR(25),
 	groupType ENUM('club', 'organization', 'other'),
 	Gstatus ENUM('closed', 'public', 'secret'),
 	Gowner CHAR(14)
 )
 BEGIN
+    set @groupID = 0;
     INSERT INTO fGroup(groupName, groupType, Gstatus, Gowner)
     VALUES (groupName, groupType, Gstatus, Gowner);
-    select last_insert_id() into groupID;
+    select last_insert_id() into @groupID;
     insert into `Page`(fGroup, postCount)
-    values(groupID,0);
+    values(@groupID,0);
     insert into Member(groupID,membership,userId)
-    values(groupID,'admin',Gowner);
+    values(@groupID,'admin',Gowner);
 END//
 
 CREATE PROCEDURE searchUser(

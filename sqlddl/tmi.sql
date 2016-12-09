@@ -142,6 +142,7 @@ CREATE TABLE LikeComment (
 );
 
 CREATE TABLE Employee (
+    UserID CHAR(14) ,
     SSN INT,
     FirstName CHAR(50),
     LastName CHAR(50),
@@ -166,7 +167,7 @@ CREATE TABLE StoreAccounts (
 );
 
 CREATE TABLE Advertisements (
-    AdvertisementID INT,
+    AdvertisementID INT auto_increment,
     EmployeeID INT NOT NULL,
     MerchandiseType CHAR(50),
     DatePublished DATE,
@@ -179,10 +180,10 @@ CREATE TABLE Advertisements (
     FOREIGN KEY (EmployeeID)
         REFERENCES Employee (SSN)
         ON UPDATE CASCADE ON DELETE CASCADE
-);
+)
 
 CREATE TABLE Sales (
-    TransactionID INT,
+    TransactionID INT auto_increment,
     DatePurchase DATE,
     AdvertisementID INT,
     NumberofUnits INT,

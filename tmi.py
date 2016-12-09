@@ -3,17 +3,23 @@ from flask_login import LoginManager, login_user, current_user, logout_user, log
 from Data.LoginForm import LoginForm
 from Data.PostForm import PostForm
 from Data.SearchForm import SearchForm
+from Data.editEmployee import editEmployee
 from Data.SignUpForm import SignUpForm
 from Data.GroupForm import GroupForm
 from Data.MessageForm import MessageForm
+from Data.AddEmployeeForm import AddEmployeeForm
 from database import create_app
 from model.User import User, db
 from model.Page import Page
 from model.Post import Post
+
+from model.Advertisements import Advertisements
 from model.Messages import Message
 from model.Group import Group
 from model.Member import Member
+from model.Sales import Sales
 from model.Comment import Comment
+from model.Employee import Employee
 from os import environ
 
 app = Flask(__name__)
@@ -72,7 +78,11 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-
+@app.route('/advertisements',methods=['GET'])
+def ads():
+    search = SearchForm()
+    ads = Advertisements.query.all()
+    return render_template('Advertisements.html',searchform=search, ads=ads)
 # signup page
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -87,6 +97,7 @@ def signup():
 
         else:
             return render_template('signup.html', form=form, login=login)
+
 
 
 # login page
@@ -213,9 +224,104 @@ def edit_comment(groupID,postID,commentID):
     db.session.commit()
     return redirect(url_for('groups', groupID=groupID))
 
+@app.route('/advertisements', methods=['POST','GET'])
+def create_ad():
+    form = request.form
+    employee = Employee.query.filter(Employee.UserID==current_user.userID).first()
+    ads = Advertisements.query.all()
+    if request.method=='GET':
+        return render_template('Advertisements.html', ads=ads)
+    if request.method=='POST':
+        ad = Advertisements(employee.SSN,form['type'],employee.CName,form['name'],form['price'],form['units'])
+        db.session.add(ad)
+        db.session.commit()
+        return redirect(url_for('create_ad'))
+
+@app.route('/ad/del/<int:adID>')
+def del_ad(adID):
+    Advertisements.query.filter(Advertisements.AdvertisementID==adID).delete()
+    db.session.commit()
+    return redirect(url_for('ads'))
 
 
-@app.route('/home/del/<int:postID>',methods=['GET'])
+
+@app.route('/employees',methods=['POST','GET'])
+def employees():
+    search = SearchForm()
+    login = LoginForm()
+    employees= Employee.query.all()
+    form = AddEmployeeForm()
+    if request.method=='GET':
+        return render_template('AddEmployee.html', title='Add Employee', form=form, login=login, searchform=search, employees=employees)
+    elif request.method=='POST':
+        if form.validate():
+            Employee.addEmployee(form)
+            return redirect(url_for('employees'))
+    return render_template('AddEmployee.html', title='Add Employee', form=form, login=login, searchform=search, employees=employees)
+
+@app.route('/employee', methods=['GET'])
+def employee():
+    search=SearchForm
+    return render_template('employee.html', searchform=search)
+
+@app.route('/employees/del/<int:SSN>',methods=['GET'])
+def del_emp(SSN):
+    Employee.query.filter(Employee.SSN==SSN).delete()
+    db.session.commit()
+    return redirect(url_for('employees'))
+
+@app.route('/sales/<string:date>')
+def month_sales(date):
+    string = 'SELECT * FROM Sales WHERE MONTH(DatePurchase="%s")' % (date)
+    conn = db.engine.raw_connection()
+    cursor = conn.cursor()
+    cursor.execute(string)
+    results = cursor.fetchall()
+    if results:
+     return results
+    return "no data"
+
+# @app.route('/advertisements')
+# def ads():
+#     ads = Advertisements.query.all()
+#     s = ''
+#     for ad in ads:
+#         s += 'id: '+ad.AdvertisementID +'\n'
+#     return s
+
+
+@app.route('/employees/edit/<int:SSN>',methods=['GET','POST'])
+def edit_emp(SSN):
+    search = SearchForm()
+    employee = Employee.query.filter(Employee.SSN==SSN).first()
+    form = editEmployee()
+    if request.method=='GET':
+            form.address.data = employee.Address
+            form.firstname.data = employee.FirstName
+            form.lastname.data = employee.LastName
+            form.company.data = employee.CName
+            form.zipcode.data = employee.ZipCode
+            form.hourlypay.data = employee.HourlyRate
+            return render_template('editemp.html',searchform=search,form=form, employee=employee)
+    elif request.method == 'POST':
+        if form.validate():
+            employee.Address = form.address.data
+            employee.FirstName=form.firstname.data
+            employee.LastName=form.lastname.data
+            employee.CName=form.company.data
+            employee.ZipCode=form.zipcode.data
+            employee.HourlyRate = form.hourlypay.data
+            db.session.commit()
+            return redirect(url_for('employees'))
+        else:
+            return render_template('editemp.html', searchform=search,form=form, employee=employee)
+
+
+
+
+
+
+@app.route('/home/del/<int:postID>',methods=['GET','POST'])
 def del_post(postID):
     Post.query.filter(Post.postID==postID).delete()
     db.session.commit()

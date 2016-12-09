@@ -49,6 +49,6 @@ class User(db.Model, UserMixin):
                                          form.city.data,
                                          form.state.data,
                                          0,
-                                         'user'])
+                                         form.userType.data])
         cursor.close()
         connection.commit()

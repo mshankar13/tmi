@@ -1,0 +1,157 @@
+{% extends "index.html" %}
+{% block content %}
+    <div class="content ">
+        <div class="pure-g">
+            <div class="pure-u-1-3">
+                <h2 class="content-head">Add an Employee</h2>
+                <form class="pure-form pure-form-stacked" method="POST" action="/employees">
+                    <fieldset>
+                        {{ form.hidden_tag() }}
+
+                        {{ form.firstname.label }}
+                        {% if form.firstname.errors %}
+                            {% for error in form.firstname.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.firstname }}
+
+                        {{ form.lastname.label }}
+                        {% if form.lastname.errors %}
+                            {% for error in form.lastname.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.lastname }}
+
+
+                        {{ form.email.label }}
+                        {% if form.email.errors %}
+                            {% for error in form.email.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.email }}
+
+
+                        {{ form.socialsecurity.label }}
+                        {% if form.socialsecurity.errors %}
+                            {% for error in form.socialsecurity.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.socialsecurity }}
+
+                        {{ form.username.label }}
+                        {% if form.username.errors %}
+                            {% for error in form.username.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.username }}
+
+                        {{ form.password.label }}
+                        {% if form.password.errors %}
+                            {% for error in form.password.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.password }}
+
+
+                        {{ form.confirm.label }}
+                        {{ form.confirm }}
+
+                        {{ form.address.label }}
+                        {% if form.address.errors %}
+                            {% for error in form.address.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.address }}
+
+
+                        {{ form.city.label }}
+                        {% if form.city.errors %}
+                            {% for error in form.city.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.city }}
+
+                        {{ form.zipcode.label }}
+                        {% if form.zipcode.errors %}
+                            {% for error in form.zipcode.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.zipcode }}
+
+                        {{ form.state.label }}
+                        {% if form.state.errors %}
+                            {% for error in form.state.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.state }}
+
+                        {{ form.telephone.label }}
+                        {% if form.telephone.errors %}
+                            {% for error in form.telephone.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.telephone }}
+
+                        {{ form.hourlypay.label }}
+                        {% if form.hourlypay.errors %}
+                            {% for error in form.hourlypay.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.hourlypay }}
+
+
+                        {{ form.company.label }}
+                        {% if form.company.errors %}
+                            {% for error in form.company.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.company }}
+
+
+                        {{ form.submit }}
+                    </fieldset>
+                </form>
+            </div>
+        <div class="pure-u-2-3">
+            {% for employee in employees %}
+
+                            <div class="pure-menu pure-menu-horizontal">
+                                <ul class="pure-menu-list">
+                                    <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
+                                        <a href="/employees/del/{{ employee.postID }}">
+                                            <img src={{ url_for('static',filename='img/settings.png') }}/>
+                                        </a>
+                                        <ul class="pure-menu-children">
+                                            <li class="pure-menu-item">
+                                                <a href="employees/edit/{{ employee.SSN }}" class="pure-menu-link">Edit</a>
+                                            </li>
+                                            <li class="pure-menu-item">
+                                                <a href="/employees/del/{{ employee.SSN }}" class="pure-menu-link">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="pure-menu-item">
+                                         {{ employee.UserID }}
+                                    </li>
+                                </ul>
+                            </div>
+
+                {% endfor %}
+
+        </div>
+        </div>
+    </div>
+{% endblock %}

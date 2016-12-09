@@ -57,7 +57,10 @@ def home():
     userID = current_user.userID
     page = Page.query.filter(Page.Powner == userID).first()
     posts = Post.query.filter(Post.pageID == page.pageID).order_by(Post.postDate.desc())
-
+    if current_user.userType == 'manager':
+        return redirect(url_for('employees'))
+    elif current_user.userType=='employee':
+        return redirect(url_for('emp'))
     if request.method == 'GET':
         return render_template('home.html', posts=posts, formpost=makepost, searchform=search)
     elif request.method == 'POST':
@@ -68,9 +71,13 @@ def home():
             cursor.close()
             connection.commit()
         else:
-            return render_template('home.html', posts=posts, formpost=makepost, searchForm=search)
+            return render_template('home.html', posts=posts, formpost=makepost, searchform=search)
         return redirect(url_for('home'))
 
+@app.route('/emp')
+def emp():
+    search= SearchForm()
+    return render_template('employee.html',searchform=search )
 
 @app.route('/logout')
 @login_required
@@ -86,17 +93,18 @@ def ads():
 # signup page
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    search =SearchForm()
     login = LoginForm()
     form = SignUpForm()
     if request.method == 'GET':
-        return render_template('signup.html', title='Sign Up', form=form, login=login)
+        return render_template('signup.html', title='Sign Up', form=form, login=login,searchform=search)
     elif request.method == 'POST':
         if form.validate():
             User.registerUser(form)
-            return render_template('index.html', login=login)
+            return render_template('index.html', login=login,searchform=search)
 
         else:
-            return render_template('signup.html', form=form, login=login)
+            return render_template('signup.html', form=form, login=login,searchform=search)
 
 
 

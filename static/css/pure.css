@@ -768,6 +768,11 @@ this the same font stack that Normalize.css sets for the `body`.
     box-sizing: border-box;
 }
 
+.pure-button-xsmall {
+    font-size: 70%;
+    right: 20px;
+}
+
 /* Firefox: Get rid of the inner focus border */
 .pure-button::-moz-focus-inner {
     padding: 0;

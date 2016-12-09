@@ -13,6 +13,7 @@ from model.Post import Post
 from model.Messages import Message
 from model.Group import Group
 from model.Member import Member
+from model.Comment import Comment
 from os import environ
 
 app = Flask(__name__)
@@ -171,18 +172,29 @@ def delete_message(userID,messageID):
 
 @app.route('/groups/<int:groupID>', methods=['GET', 'POST'])
 def groups(groupID):
-    group = Group.query.filter(Group.groupID == groupID).first()
-    if request.method == 'GET':
-        search = SearchForm()
-        makePost = PostForm()
-        page = Page.query.filter(Page.fGroup == groupID).first()
-        posts = Post.query.filter(Post.pageID == page.pageID).order_by(Post.postDate.desc()).all()
-        members = db.session.query(User, Member).filter(User.userID == Member.userID, Member.groupID == groupID).all()
-        return render_template('group_page.html', searchform=search, formpost=makePost, posts=posts, members=members,
-                               group=group)
 
+    makePost = PostForm()
+    search = SearchForm()
+    page = Page.query.filter(Page.fGroup == groupID).first()
+    posts = Post.query.filter(Post.pageID == page.pageID).order_by(Post.postDate.desc())
+    comments = Comment.query.filter(Comment.postID.in_(db.session.query(Post.postID).filter(Post.pageID==page.pageID))).all()
+    members = db.session.query(User, Member).filter(User.userID == Member.userID, Member.groupID == groupID).all()
+    if request.method=='GET':
+        posts= Post.query.filter(Post.pageID==page.pageID).order_by(Post.postDate.desc()).all()
+        return render_template('group_page.html', comments=comments, searchform=search, formpost=makePost,posts=posts,members=members,groupID=groupID)
+    elif request.method == 'POST':
+        userID = current_user.userID
+        if makePost.validate():
+            connection = db.engine.raw_connection()
+            cursor = connection.cursor()
+            cursor.callproc('postOnGroup', [current_user.userID, groupID, makePost.post.data])
+            cursor.close()
+            connection.commit()
+        else:
+            return render_template('group_page.html', posts=posts, formpost=makePost, searchform=search, members=members, groupID=groupID)
+        return redirect(url_for('groups', groupID=groupID))
 
-@app.route('/join/<int:groupID>', methods=['GET'])
+@app.route('/join/<int:groupID>')
 def join(groupID):
     Group.addUser(groupID, current_user)
     return redirect(url_for('groups', groupID=groupID))
@@ -236,6 +248,27 @@ def remove_user(groupID, userID):
     conn.commit()
     return redirect(url_for('groups', groupID=groupID))
 
+
+@app.route('/groups/<int:groupID>/<int:postID>', methods=['POST'])
+def make_comment(groupID,postID):
+    conn = db.engine.raw_connection()
+    cursor = conn.cursor()
+    cursor.callproc('commentOnGroup', args=[postID,request.form['comment'],current_user.userID])
+    cursor.close()
+    conn.commit()
+    return redirect(url_for('groups',groupID=groupID))
+
+@app.route('/groups/<int:groupID>/<int:postID>/del/<int:commentID>', methods=['GET'])
+def delete_comment(groupID,postID,commentID):
+    Comment.query.filter(Comment.commentID == commentID).delete()
+    db.session.commit()
+    return redirect(url_for('groups', groupID=groupID))
+
+@app.route('/groups/<int:groupID>/del/<int:postID>', methods=['GET'])
+def delete_post(groupID, postID):
+    Post.query.filter(Post.postID == postID).delete()
+    db.session.commit()
+    return redirect(url_for('groups', groupID=groupID))
 
 def signinUser(login):
     if login.validate():
